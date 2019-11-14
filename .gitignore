@@ -1,0 +1,8 @@
+# compile file
+or
+
+# log files
+*.log
+
+# OS trush files
+.DS_Store
