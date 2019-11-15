@@ -80,7 +80,7 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
 
     while(1)
     {
-        // 微分
+        // F(x)をxで微分する
         nablaLagragian_x(&dx, is_function->x, is_function->a, is_function->b, is_function->c, is_function->d);
 
         // 計算終了条件
