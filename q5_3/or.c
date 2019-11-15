@@ -140,5 +140,5 @@ void nablaLagragian_lambda(double *dlambda, double x, double c)
 // F(x)関数
 double func(double x, double a, double b)
 {
-    return (x - a) * (x - a) + (b * x); // 解答(5)
+    return pow(x - a, 2.0) + (b * x); // 解答(5)
 }
