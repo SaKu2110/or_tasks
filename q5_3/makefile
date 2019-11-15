@@ -4,4 +4,4 @@ or:
 
 clean:
 	$(RM) or
-	$(RM) *log
+	$(RM) *.log

@@ -19,7 +19,7 @@ typedef struct
     int period; // 計算結果を出力する周期
 
     double alpha; // 刻み幅
-    double eps;
+    double eps; // 計算終了基準
 
 } ENV_VAR;
 
@@ -43,20 +43,24 @@ int main()
     FUNCTION function_variable;
     ENV_VAR environment_variable;
 
+    // (1)の計算
     Initialization_variable(&function_variable, &environment_variable, 1.0, 0.0, 0.0);
     Calculate_optimization(&function_variable, &environment_variable, "result_1.log");
     printf("\n");
 
+    // (2)の計算処理
     Initialization_variable(&function_variable, &environment_variable, 11.0, 1.0, 1.0);
     Calculate_optimization(&function_variable, &environment_variable, "result_2.log");
     printf("\n");
 
+    // (3)の計算処理
     Initialization_variable(&function_variable, &environment_variable, 21.0, 2.0, 2.0);
     Calculate_optimization(&function_variable, &environment_variable, "result_3.log");
 
     return 0;
 }
 
+// 変数の初期化
 void Initialization_variable(FUNCTION *is_function, ENV_VAR *is_env_var, double a, double b, double c)
 {
     // functions's variable
@@ -75,6 +79,7 @@ void Initialization_variable(FUNCTION *is_function, ENV_VAR *is_env_var, double 
     is_env_var->eps = 0.001;
 }
 
+// 計算処理
 void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *file_name)
 {
     int k = 0;
@@ -113,23 +118,26 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
     fclose(calc_log);
 }
 
-
+// 計算（途中）結果をコンソールに表示する
 void show_result_display(int k, double dx, double dlambda, double x, double lambda,double a, double b)
 {
     fprintf(stdout, "k=%d, dx_k=%1.3le, dlambda_k=%1.3le, lambda=%1.3le, ", k, dx, dlambda, lambda);
     fprintf(stdout, "x_{k+1}=%1.3le, func(x_{k+1})=%1.3le\n", x, func(x, a, b)); // func
 }
 
+// L(x, λ)をxで微分する
 void nablaLagragian_x(double *dx, double x, double lambda, double a, double b)
 {
     *dx = -(2.0 * (x - a) + b + lambda); // 解答(4)
 }
 
+// L(x, λ)をλで微分する
 void nablaLagragian_lambda(double *dlambda, double x, double c)
 {
     *dlambda = -(x - c);
 }
 
+// F(x)関数
 double func(double x, double a, double b)
 {
     return (x - a) * (x - a) + (b * x); // 解答(5)
