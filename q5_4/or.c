@@ -10,13 +10,14 @@ typedef struct
 
 } FUNCTION;
 
+// 計算する上で必要な環境変数
 typedef struct
 {
     int max_loop; // ループ処理の最大回数
     int period; // 計算結果を出力する周期
 
     double alpha; // 刻み幅
-    double eps;
+    double eps; // 終了判断基準
 
 } ENV_VAR;
 
@@ -26,10 +27,10 @@ void Initialization_variable();
 void Calculate_optimization();
 void show_result_display();
 
-// dF(x, λ)/dx = 2 * (x - a) + b + λ 
+// F(x)をxで微分した結果
 void nablaLagragian_x(double *dx, double x, double a, double b, double c, double d);
 
-// f(x) = (x - a)^2 + b * x
+// F(x)関数
 double func(double x, double a, double b, double c, double d);
 
 int main()
@@ -49,6 +50,7 @@ int main()
     return 0;
 }
 
+// 変数の初期化
 void Initialization_variable(FUNCTION *is_function, ENV_VAR *is_env_var,
     double a, double b, double c, double d, double x)
 {
@@ -68,6 +70,7 @@ void Initialization_variable(FUNCTION *is_function, ENV_VAR *is_env_var,
     is_env_var->eps = 0.001;
 }
 
+// 計算処理
 void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *file_name)
 {
     int k = 0;
@@ -80,7 +83,7 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
         // 微分
         nablaLagragian_x(&dx, is_function->x, is_function->a, is_function->b, is_function->c, is_function->d);
 
-        // 計算終了条件 解答(2)
+        // 計算終了条件
         if(!(k < is_env_var->max_loop)) break;
         if((ABS(dx) < is_env_var->eps))
             break;
@@ -95,7 +98,6 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
     show_result_display(k, dx, is_function->x,
         is_function->a, is_function->b, is_function->c, is_function->d);
 
-    // 解答(3)
     fprintf(calc_log, "a=%1.3le,b=%1.3le,c=%1.3le,d=%1.3le: x=%1.3le, F(x)=%1.3le\n", 
         is_function->a, is_function->b, is_function->c, is_function->d, is_function->x,
         func(is_function->x, is_function->a, is_function->b,is_function->c, is_function->d));
@@ -103,7 +105,7 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
     fclose(calc_log);
 }
 
-
+// コンソールに計算（途中）結果を表示する
 void show_result_display(int k, double dx, double x, double a, double b, double c, double d)
 {
     fprintf(stdout, "k=%d, dx_k=%1.3le, ", k, dx);
