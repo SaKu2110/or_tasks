@@ -87,9 +87,10 @@ void Calculate_optimization(FUNCTION *is_function, ENV_VAR *is_env_var, char *fi
     FILE *calc_log; // 計算結果を出力するためのファイル
     calc_log = fopen(file_name, "w"); // 書き込み用ファイルを開く
 
+    // 問6 (1)
     while(1)
     {
-        // 微分
+        // F(x)をxで微分する 問6 (2)
         nablaLagragian_x(&dx, is_function->x, is_function->lambda, is_function->a, is_function->b);
         nablaLagragian_lambda(&dlambda, is_function->x, is_function->c);
 
